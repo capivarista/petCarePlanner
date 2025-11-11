@@ -15,23 +15,30 @@ export default function Login() {
     return (
         <>
             <div className="topbar" />
-            <div className="screen">
+            <div className="screen" style={{paddingTop: 36}}>
                 <div className="login-header">
-                    <div className="paw" />
-                    <div className="login-title">Pet Care Planner</div>
+                    <div className="paw" aria-hidden>🐾</div>
+                    <div>
+                        <div className="login-title">Pet Care Planner</div>
+                        <p className="login-subtitle">Cuide de ONGs e resgates com poucos toques.</p>
+                    </div>
                 </div>
 
-                <form className="card col" onSubmit={handleLogin} style={{gap:12}}>
-                    <Input placeholder="Username" />
-                    <Input type="password" placeholder="Your password" />
-                    <button className="btn primary block" type="submit">LOGIN</button>
-                    <div className="row" style={{justifyContent:"space-between", color:"var(--muted)", fontSize:12}}>
-                        <span>não tem conta? <strong>criar</strong></span>
-                        <span>• • •</span>
+                <form className="login-card" onSubmit={handleLogin}>
+                    <div className="col">
+                        <Input placeholder="Email ou usuário" aria-label="Email ou usuário" />
+                        <Input type="password" placeholder="Sua senha" aria-label="Senha" />
+                    </div>
+                    <button className="btn primary block" type="submit">Entrar e ajudar</button>
+                    <div className="login-footer">
+                        <span>É novo aqui? <strong>Crie agora</strong></span>
+                        <span style={{letterSpacing:4}}>• • •</span>
                     </div>
                 </form>
             </div>
-            <div className="bottom-bar" />
+            <div className="bottom-bar">
+                <div className="pill">🌟 Destaque do dia: +34 pets resgatados</div>
+            </div>
         </>
     );
 }

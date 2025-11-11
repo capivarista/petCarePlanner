@@ -12,31 +12,26 @@ export default function PixQR(){
 
     return (
         <>
-            <Header title="PIX" backHref="/donate/pix" />
+            <Header title="PIX" subtitle="Finalize sua doação" backHref="/donate/pix" />
             <div className="screen">
-                <div className="card col">
+                <div className="card col" style={{gap:16}}>
+                    <div className="section-title">Escaneie com o aplicativo do banco</div>
                     <div className="qr-box">
-                        {/* Placeholder visual de QR; substitua por um gerador real se quiser */}
-                        <div className="qr-placeholder" />
+                        <div className="qr-placeholder" aria-hidden />
                     </div>
-
-                    <div className="card" style={{marginTop:10}}>
-                        <div className="col" style={{gap:6}}>
-                            <div className="label">informações da instituição</div>
-                            <div><strong>Nome:</strong> {ngo}</div>
-                            <div><strong>CPF:</strong> 123.456.789-10</div>
-                            <div><strong>Data de criação:</strong> 10/10/2024</div>
-                            <div><strong>Selo de verificação:</strong> ✅</div>
-                            {info && <div className="hr" />}
-                            {info && (
-                                <div style={{fontSize:13, color:"var(--muted)"}}>
-                                    doador: {info.name || "—"} • cpf: {info.cpf || "—"} • tel: {info.phone || "—"}
-                                </div>
-                            )}
+                    <div className="floating-card" style={{display:"grid", gap:8}}>
+                        <div style={{fontWeight:600, fontSize:13}}>Destinatário: {ngo}</div>
+                        <div style={{fontSize:12, color:"var(--muted)", lineHeight:1.5}}>
+                            Copie o código PIX caso prefira colar manualmente: <strong>0002010102122685PIXDOE{ngo.slice(0,3).toUpperCase()}5204000053039865802BR5920ONG PET CARE6009Uberlandia6304ABCD</strong>
                         </div>
+                        {info && (
+                            <div style={{fontSize:12, color:"var(--muted)"}}>
+                                Doador: <strong>{info.name || "—"}</strong> • CPF: {info.cpf || "—"} • Tel: {info.phone || "—"}
+                            </div>
+                        )}
                     </div>
-
-                    <div className="row" style={{justifyContent:"flex-end", marginTop:10}}>
+                    <div className="row" style={{justifyContent:"space-between"}}>
+                        <span style={{fontSize:11, color:"var(--muted)"}}>Após o pagamento você será direcionado para acompanhar o recibo.</span>
                         <Link href="/home" className="btn cta small">Concluído</Link>
                     </div>
                 </div>

@@ -6,9 +6,6 @@ import Header from "@/components/Header";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 
-export const revalidate = 0;              // evita tentativa de SSG
-export const dynamic = "force-dynamic";   // força render dinâmico
-
 function DonateInner() {
     const ngo = useSearchParams().get("ngo") ?? "Instituição";
     return (

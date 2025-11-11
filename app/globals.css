@@ -1,26 +1,154 @@
-@import "tailwindcss";
-
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* app/globals.css */
+:root{
+    --blue:#508CFF;
+    --blue-2:#C8D7FF;
+    --card:#EAF0FF;
+    --ink:#1F2B4D;
+    --muted:#6C7AA6;
+    --orange:#FFB84D;
+    --green:#66E083;
+    --yellow:#FFE27A;
+    --radius:18px;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+    margin:0;
+    font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Inter, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji","Segoe UI Emoji";
+    background: radial-gradient(1200px 1200px at 50% -100px, #6AA2FF 10%, var(--blue) 60%, #3a6fe0 100%);
+    color:var(--ink);
+    display:grid;
+    place-items:center;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* “iPhone” */
+.phone-frame{
+    width:390px;           /* iPhone 16 Pro Max ~390 CSS px */
+    min-height: 844px;
+    background:#DCE5FF;
+    border-radius: 28px;
+    box-shadow: 0 15px 40px rgba(14,33,78,.25);
+    overflow:hidden;
+    display:flex;
+    flex-direction:column;
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* Top bar */
+.topbar{
+    height:64px;
+    background:linear-gradient(180deg, #7CB0FF, #88B8FF 70%, #7FAEF9);
+    color:#0F2558;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 14px;
+    font-weight:600;
+    letter-spacing:.2px;
 }
+.topbar .title{
+    display:flex; gap:8px; align-items:center;
+}
+.icon-btn{
+    background:#E9F1FF;border:none;border-radius:12px;
+    width:36px;height:36px; display:grid; place-items:center;
+    font-size:18px; cursor:pointer;
+    box-shadow: inset 0 -1px 0 rgba(0,0,0,.05);
+}
+a.icon-btn{ text-decoration:none; color:inherit; }
+.hidden{ display:none; }
+
+/* Content wrapper */
+.screen{
+    flex:1; padding:14px; overflow:auto;
+}
+
+/* Cards & UI primitives */
+.card{
+    background:var(--card);
+    border-radius: var(--radius);
+    box-shadow: 0 2px 0 rgba(12,27,64,.06), 0 14px 24px rgba(12,27,64,.10);
+    padding:14px;
+}
+
+.btn{
+    appearance:none; border:none; cursor:pointer;
+    padding:12px 16px; border-radius:16px; font-weight:700;
+    background:#C9D7FF; color:#203058;
+    transition: transform .04s ease, filter .2s;
+}
+.btn:active{ transform: translateY(1px) }
+.btn.primary{ background:#9AB5FF; }
+.btn.cta{ background:var(--orange); }
+.btn.green{ background:var(--green);}
+.btn.yellow{ background:var(--yellow);}
+.btn.block{ width:100% }
+.btn.small{ padding:8px 12px; border-radius:12px; font-weight:600; }
+
+/* Inputs */
+.input{
+    width:100%; border:none; outline:none;
+    padding:12px 14px; border-radius:16px;
+    background:#F4F7FF; color:#1A2752; font-size:15px;
+    box-shadow: inset 0 0 0 1px rgba(41,88,207,.04);
+}
+.field{ display:grid; gap:8px; }
+.field + .field{ margin-top:12px; }
+.label{ font-size:12px; color:var(--muted); padding-left:6px }
+
+.row{ display:flex; gap:10px; align-items:center; }
+.col{ display:grid; gap:10px; }
+
+/* Donation card */
+.pet-card{ display:grid; gap:10px; }
+.pet-img{
+    height:140px; border-radius:14px; background:#D7E2FF;
+    display:grid; place-items:center; color:#90A3E6; font-weight:700;
+}
+.tags{ display:flex; gap:6px; flex-wrap:wrap; }
+.tag{ background:#E8EEFF; padding:6px 10px; border-radius:12px; font-size:12px; color:#4C5F98 }
+
+/* List spacing */
+.stack{ display:grid; gap:12px; }
+
+/* Login */
+.login-header{
+    display:grid; place-items:center; gap:10px; margin:14px 0 6px;
+}
+.paw{
+    width:96px;height:96px;border-radius:30px;background:#FFB84D;
+    box-shadow: inset 0 -4px 0 rgba(0,0,0,.08);
+}
+.login-title{ font-size:24px; font-weight:800; color:#16306B }
+
+/* Profile */
+.profile-avatar{
+    width:110px;height:110px;border-radius:999px; background:#D6E2FF;
+    display:grid; place-items:center; margin:0 auto 8px; font-size:48px; color:#94A8E3;
+    box-shadow: inset 0 -2px 0 rgba(0,0,0,.06);
+}
+.kv{ display:grid; gap:6px }
+.kv .row{ justify-content:space-between; }
+
+/* Footer bar */
+.bottom-bar{
+    position:sticky; bottom:0; padding:10px 0 2px; background:transparent;
+}
+
+/* Subtle divider */
+.hr{ height:1px; background:#D0DBFF; margin:10px 0; opacity:.7 }
+
+/* QR */
+.qr-box{
+    background:#FFF; border-radius:16px; padding:14px;
+    box-shadow: 0 10px 22px rgba(10,30,70,.10);
+}
+.qr-placeholder{
+    width:100%; aspect-ratio:1/1; border-radius:12px; background:
+        conic-gradient(#000 0 25%, #fff 0 50%, #000 0 75%, #fff 0) 0 0/24px 24px,
+        linear-gradient(#000 0 0) center/1px 100% no-repeat,
+        linear-gradient(#000 0 0) center/100% 1px no-repeat;
+}
+
+/* tiny helper for two-column buttons */
+.grid2{ display:grid; grid-template-columns:1fr 1fr; gap:10px }

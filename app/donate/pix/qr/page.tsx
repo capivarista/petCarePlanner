@@ -1,41 +1,43 @@
 // app/donate/pix/qr/page.tsx
 "use client";
+
+import { Suspense } from "react";
 import Header from "@/components/Header";
-import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 
-export default function PixQR(){
+export const revalidate = 0;
+export const dynamic = "force-dynamic";
+
+function PixQRInner() {
     const sp = useSearchParams();
-    const ngo = sp.get("ngo") ?? "Save Cat";
-    const raw = sp.get("p");
-    const info = raw ? JSON.parse(decodeURIComponent(raw)) : null;
+    const ngo = sp.get("ngo") ?? "Instituição";
+    const payload = sp.get("p") ?? "";
 
     return (
         <>
-            <Header title="PIX" subtitle="Finalize sua doação" backHref="/donate/pix" />
+            <Header title="PIX" backHref={`/donate/pix?ngo=${encodeURIComponent(ngo)}`} />
             <div className="screen">
-                <div className="card col" style={{gap:16}}>
-                    <div className="section-title">Escaneie com o aplicativo do banco</div>
-                    <div className="qr-box">
-                        <div className="qr-placeholder" aria-hidden />
+                <div className="card">
+                    <div className="section-title">PIX</div>
+                    <div className="qr-box" style={{ marginTop: 10 }}>
+                        <div className="qr-placeholder" />
                     </div>
-                    <div className="floating-card" style={{display:"grid", gap:8}}>
-                        <div style={{fontWeight:600, fontSize:13}}>Destinatário: {ngo}</div>
-                        <div style={{fontSize:12, color:"var(--muted)", lineHeight:1.5}}>
-                            Copie o código PIX caso prefira colar manualmente: <strong>0002010102122685PIXDOE{ngo.slice(0,3).toUpperCase()}5204000053039865802BR5920ONG PET CARE6009Uberlandia6304ABCD</strong>
-                        </div>
-                        {info && (
-                            <div style={{fontSize:12, color:"var(--muted)"}}>
-                                Doador: <strong>{info.name || "—"}</strong> • CPF: {info.cpf || "—"} • Tel: {info.phone || "—"}
-                            </div>
-                        )}
+                    <div style={{ fontSize: 12, color: "var(--muted)", marginTop: 8 }}>
+                        Payload: <code>{payload || "—"}</code>
                     </div>
-                    <div className="row" style={{justifyContent:"space-between"}}>
-                        <span style={{fontSize:11, color:"var(--muted)"}}>Após o pagamento você será direcionado para acompanhar o recibo.</span>
-                        <Link href="/home" className="btn cta small">Concluído</Link>
-                    </div>
+                    <button className="btn cta" type="button" style={{ marginTop: 12 }}>
+                        Concluído
+                    </button>
                 </div>
             </div>
         </>
+    );
+}
+
+export default function PixQRPage() {
+    return (
+        <Suspense fallback={<div className="screen"><div className="card">Carregando QR…</div></div>}>
+            <PixQRInner />
+        </Suspense>
     );
 }

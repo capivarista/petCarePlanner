@@ -6,9 +6,6 @@ import Header from "@/components/Header";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 
-export const revalidate = 0;
-export const dynamic = "force-dynamic";
-
 function PixInner() {
     const sp = useSearchParams();
     const ngo = sp.get("ngo") ?? "Instituição";
@@ -21,7 +18,6 @@ function PixInner() {
                     <div className="qr-box">
                         <div className="qr-placeholder" />
                     </div>
-
                 </div>
 
                 <div className="card" style={{ display: "grid", gap: 10 }}>

@@ -5,9 +5,6 @@ import { Suspense } from "react";
 import Header from "@/components/Header";
 import { useSearchParams } from "next/navigation";
 
-export const revalidate = 0;
-export const dynamic = "force-dynamic";
-
 function PixQRInner() {
     const sp = useSearchParams();
     const ngo = sp.get("ngo") ?? "Instituição";

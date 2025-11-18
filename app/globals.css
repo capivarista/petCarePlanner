@@ -446,3 +446,120 @@ body {
         color: white;
     }
 }
+
+/* Adicione ao final do globals.css existente */
+
+.urgency-badge {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: var(--red);
+    color: white;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 600;
+    z-index: 2;
+}
+
+.pet-card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.pet-card:hover {
+    transform: translateY(-4px);
+}
+
+.skeleton {
+    background: linear-gradient(90deg, #f0f4ff 25%, #e1e9ff 50%, #f0f4ff 75%);
+    background-size: 200% 100%;
+    animation: loading 1.5s infinite;
+    border-radius: 12px;
+}
+
+@keyframes loading {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+.chip-group {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.chip {
+    border: none;
+    padding: 6px 12px;
+    border-radius: 999px;
+    background: rgba(223,232,255,.6);
+    color: #324a8a;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 12px;
+}
+
+.chip:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(45,74,168,.15);
+}
+
+.chip.is-active {
+    background: linear-gradient(135deg, #97b3ff, #708ff5);
+    color: #f2f5ff;
+}
+
+.filter-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(17,29,62,.35);
+    display: grid;
+    place-items: center;
+    padding: 32px 18px;
+    z-index: 1000;
+    backdrop-filter: blur(6px);
+}
+
+.filter-sheet {
+    width: min(360px, 100%);
+    display: grid;
+    gap: 18px;
+    background: rgba(236,243,255,.98);
+    border-radius: 24px;
+    padding: 22px 20px;
+    box-shadow: 0 24px 48px rgba(20,40,95,.28);
+    border: 1px solid rgba(255,255,255,.7);
+}
+
+.tag-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 10px;
+}
+
+.filter-tag {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 14px;
+    padding: 10px 14px;
+    border: 1px solid rgba(108,136,224,.45);
+    background: rgba(222,232,255,.85);
+    color: #21346b;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.filter-tag:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 16px rgba(45,74,168,.18);
+}
+
+.filter-tag.active {
+    background: linear-gradient(135deg, #8caeff, #5c7df6);
+    color: #f4f6ff;
+    border-color: rgba(255,255,255,.4);
+}

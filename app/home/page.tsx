@@ -43,7 +43,6 @@ export default function Home() {
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-        // Simular carregamento de dados
         const timer = setTimeout(() => setIsLoading(false), 1000);
         return () => clearTimeout(timer);
     }, []);
@@ -163,7 +162,6 @@ export default function Home() {
                 </div>
             </div>
 
-            {/* Modal de Filtros */}
             {isFilterOpen && (
                 <div
                     className="filter-backdrop"

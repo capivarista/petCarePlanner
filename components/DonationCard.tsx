@@ -1,7 +1,21 @@
 // components/DonationCard.tsx
 "use client";
 import Link from "next/link";
-import { Donation } from "@/types/donation";
+
+export interface Donation {
+    id: string;
+    name: string;
+    description: string;
+    image?: string;
+    tags: string[];
+    goal?: string;
+    impact?: string;
+    owner?: {
+        id: string;
+        name: string;
+    };
+    urgency?: string;
+}
 
 interface DonationCardProps {
     donation: Donation;
@@ -9,7 +23,6 @@ interface DonationCardProps {
 
 export default function DonationCard({ donation }: DonationCardProps) {
     const {
-        id,
         name,
         description,
         image,
@@ -38,21 +51,43 @@ export default function DonationCard({ donation }: DonationCardProps) {
                 )}
 
                 {urgency && (
-                    <div className="urgency-badge">
+                    <div style={{
+                        position: 'absolute',
+                        top: '12px',
+                        right: '12px',
+                        background: 'var(--red)',
+                        color: 'white',
+                        padding: '4px 8px',
+                        borderRadius: '12px',
+                        fontSize: '12px',
+                        fontWeight: '600'
+                    }}>
                         🔥 {urgency}
                     </div>
                 )}
             </div>
 
-            <div className="card-content">
+            <div style={{ padding: '16px' }}>
                 <div className="row" style={{
                     justifyContent: "space-between",
                     alignItems: "flex-start",
-                    marginBottom: 12
+                    marginBottom: "12px"
                 }}>
                     <div style={{ flex: 1 }}>
-                        <h3 className="pet-name">{name}</h3>
-                        <p className="pet-description">
+                        <h3 style={{
+                            fontWeight: 700,
+                            fontSize: "1.1rem",
+                            marginBottom: "8px",
+                            color: "var(--ink)"
+                        }}>
+                            {name}
+                        </h3>
+                        <p style={{
+                            color: "var(--muted)",
+                            fontSize: "14px",
+                            lineHeight: 1.4,
+                            marginBottom: "12px"
+                        }}>
                             {description}
                         </p>
                     </div>
@@ -68,7 +103,7 @@ export default function DonationCard({ donation }: DonationCardProps) {
                     )}
                 </div>
 
-                <div className="tags">
+                <div className="tags" style={{ marginBottom: "12px" }}>
                     {tags.map((tag) => (
                         <span key={tag} className="tag">
               #{tag}
@@ -77,14 +112,19 @@ export default function DonationCard({ donation }: DonationCardProps) {
                 </div>
 
                 {(goal || impact) && (
-                    <div className="campaign-info">
+                    <div style={{
+                        background: "rgba(255,255,255,.6)",
+                        padding: "12px 14px",
+                        borderRadius: "16px",
+                        marginBottom: "16px"
+                    }}>
                         {goal && (
-                            <div className="goal">
-                                <strong>Meta:</strong> {goal}
+                            <div style={{ fontWeight: 600, fontSize: "13px", marginBottom: "4px" }}>
+                                🎯 {goal}
                             </div>
                         )}
                         {impact && (
-                            <div className="impact">
+                            <div style={{ fontSize: "12px", color: "var(--muted)" }}>
                                 {impact}
                             </div>
                         )}
@@ -94,7 +134,6 @@ export default function DonationCard({ donation }: DonationCardProps) {
                 <Link
                     href={`/donate?ngo=${encodeURIComponent(name)}`}
                     className="btn cta block"
-                    style={{ marginTop: 16 }}
                 >
                     Doar Agora
                 </Link>

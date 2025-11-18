@@ -1,21 +1,15 @@
-export type DonationOwner = {
-    id: string;
-    name: string;
-    role: string;
-    location: string;
-    bio: string;
-    avatar?: string;
-    focus?: string;
-    contact?: string;
-};
-
-export type Donation = {
+// types/donation.ts
+export interface Donation {
     id: string;
     name: string;
     description: string;
-    tags: string[];
     image?: string;
+    tags: string[];
     goal?: string;
     impact?: string;
-    owner: DonationOwner;
-};
+    owner?: {
+        id: string;
+        name: string;
+    };
+    urgency?: string;
+}

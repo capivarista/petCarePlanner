@@ -1,12 +1,15 @@
 // app/home/page.tsx
 "use client";
+import { useMemo, useReducer, useState, useEffect } from "react";
+import Header from "@/components/Header";
+import DonationCard from "@/components/DonationCard";
+import { DONATIONS, ALL_TAGS } from "@/data/donations";
 
-import Header from "../../components/Header";
-import DonationCard from "../../components/DonationCard";
-import { DONATIONS, ALL_TAGS } from "../../data/donations";
-import { useMemo, useReducer, useState } from "react";
+interface FilterState {
+    search: string;
+    activeTags: string[];
+}
 
-type FilterState = { search: string; activeTags: string[] };
 type FilterAction =
     | { type: "search"; value: string }
     | { type: "toggleTag"; tag: string }
@@ -35,58 +38,89 @@ export default function Home() {
         search: "",
         activeTags: [],
     });
-    const [isFilterOpen, setIsFilterOpen] = useState(false);
 
-    const filtered = useMemo(() => {
-        const q = search.trim().toLowerCase();
-        return DONATIONS.filter((d) => {
+    const [isFilterOpen, setIsFilterOpen] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
+
+    useEffect(() => {
+        // Simular carregamento de dados
+        const timer = setTimeout(() => setIsLoading(false), 1000);
+        return () => clearTimeout(timer);
+    }, []);
+
+    const filteredDonations = useMemo(() => {
+        const query = search.trim().toLowerCase();
+        return DONATIONS.filter((donation) => {
             const matchesText =
-                !q ||
-                d.name.toLowerCase().includes(q) ||
-                d.description.toLowerCase().includes(q) ||
-                d.tags.some((t) => t.toLowerCase().includes(q));
+                !query ||
+                donation.name.toLowerCase().includes(query) ||
+                donation.description.toLowerCase().includes(query) ||
+                donation.tags.some((tag) => tag.toLowerCase().includes(query));
+
             const matchesTags =
-                activeTags.length === 0 || activeTags.every((t) => d.tags.includes(t));
+                activeTags.length === 0 ||
+                activeTags.every((tag) => donation.tags.includes(tag));
+
             return matchesText && matchesTags;
         });
     }, [search, activeTags]);
 
+    if (isLoading) {
+        return (
+            <>
+                <Header title="Pet Care Planner" subtitle="Carregando..." />
+                <div className="screen">
+                    {[...Array(3)].map((_, i) => (
+                        <div key={i} className="card">
+                            <div className="skeleton" style={{ height: '200px' }} />
+                        </div>
+                    ))}
+                </div>
+            </>
+        );
+    }
+
     return (
         <>
-            <Header title="Pet Care Planner" subtitle="Acompanhe e doe com transparência" />
+            <Header
+                title="Pet Care Planner"
+                subtitle="Acompanhe e doe com transparência"
+            />
 
             <div className="screen">
-                <div className="card" style={{ display: "grid", gap: 14 }}>
+                <div className="card">
                     <div className="row" style={{ justifyContent: "space-between", alignItems: "flex-start" }}>
                         <div>
-                            <div className="section-title">Olá, Rafael 👋</div>
-                            <div style={{ color: "var(--muted)", fontSize: 13 }}>
+                            <h2 className="section-title">Olá, Rafael 👋</h2>
+                            <p style={{ color: "var(--muted)", fontSize: 14, marginTop: 4 }}>
                                 Veja as campanhas em destaque e personalize sua ajuda.
-                            </div>
+                            </p>
                         </div>
-                        <span className="pill" style={{ background: "rgba(255,255,255,.65)", fontSize: 11 }}>
-              Saldo de impacto 92 pts
-            </span>
+
+                        <div className="pill">
+                            💎 92 pts
+                        </div>
                     </div>
 
-                    <div className="row" style={{ gap: 12, alignItems: "center" }}>
+                    <div className="row" style={{ gap: 12, alignItems: "center", marginTop: 16 }}>
                         <input
                             className="input"
-                            placeholder="Buscar por causa, tag ou cidade"
+                            placeholder="🔍 Buscar por causa, tag ou cidade..."
                             value={search}
                             onChange={(e) => dispatch({ type: "search", value: e.target.value })}
                         />
+
                         <button
                             className="btn small outline"
                             type="button"
-                            onClick={() => setIsFilterOpen((s) => !s)}
+                            onClick={() => setIsFilterOpen(true)}
                         >
                             Filtrar
                         </button>
                     </div>
 
                     {activeTags.length > 0 && (
-                        <div className="chip-group active" aria-live="polite">
+                        <div className="chip-group" style={{ marginTop: 12 }}>
                             {activeTags.map((tag) => (
                                 <button
                                     key={tag}
@@ -97,72 +131,88 @@ export default function Home() {
                                     #{tag}
                                 </button>
                             ))}
+
                             <button
                                 className="link muted"
                                 type="button"
                                 onClick={() => dispatch({ type: "clearTags" })}
+                                style={{ fontSize: 12 }}
                             >
-                                limpar filtros
+                                limpar
                             </button>
                         </div>
                     )}
                 </div>
 
-                <div className="stack" style={{ paddingBottom: 32 }}>
-                    {filtered.map((d) => (
-                        <DonationCard key={d.id} d={d} />
-                    ))}
-                    {filtered.length === 0 && (
-                        <div className="card" style={{ textAlign: "center", color: "var(--muted)" }}>
-                            Nenhuma campanha encontrada para os filtros selecionados.
+                <div className="stack">
+                    {filteredDonations.length > 0 ? (
+                        filteredDonations.map((donation) => (
+                            <DonationCard key={donation.id} donation={donation} />
+                        ))
+                    ) : (
+                        <div className="card" style={{ textAlign: "center", padding: 40 }}>
+                            <div style={{ fontSize: 48, marginBottom: 16 }}>🐕</div>
+                            <h3 style={{ color: "var(--muted)", marginBottom: 8 }}>
+                                Nenhuma campanha encontrada
+                            </h3>
+                            <p style={{ color: "var(--muted)", fontSize: 14 }}>
+                                Tente ajustar os filtros ou termos de busca
+                            </p>
                         </div>
                     )}
                 </div>
             </div>
 
+            {/* Modal de Filtros */}
             {isFilterOpen && (
-                <div className="filter-backdrop" role="presentation" onClick={() => setIsFilterOpen(false)}>
+                <div
+                    className="filter-backdrop"
+                    onClick={() => setIsFilterOpen(false)}
+                >
                     <div
                         className="filter-sheet"
-                        role="dialog"
-                        aria-modal="true"
-                        aria-label="Filtrar campanhas por tags"
                         onClick={(e) => e.stopPropagation()}
                     >
                         <div className="row" style={{ justifyContent: "space-between", alignItems: "center" }}>
                             <div>
-                                <div className="section-title" style={{ marginBottom: 4 }}>
-                                    Filtrar campanhas
-                                </div>
-                                <span style={{ fontSize: 12, color: "var(--muted)" }}>
-                  Selecione uma ou mais tags para refinar os resultados
-                </span>
+                                <h3 className="section-title">Filtrar campanhas</h3>
+                                <p style={{ fontSize: 13, color: "var(--muted)", marginTop: 4 }}>
+                                    Selecione as tags para refinar
+                                </p>
                             </div>
-                            <button className="btn small" type="button" onClick={() => dispatch({ type: "clearTags" })}>
+
+                            <button
+                                className="btn small"
+                                type="button"
+                                onClick={() => dispatch({ type: "clearTags" })}
+                            >
                                 Limpar
                             </button>
                         </div>
 
-                        <div className="tag-grid" role="list">
+                        <div className="tag-grid">
                             {ALL_TAGS.map((tag) => {
-                                const active = activeTags.includes(tag);
+                                const isActive = activeTags.includes(tag);
                                 return (
                                     <button
                                         key={tag}
-                                        role="listitem"
                                         type="button"
-                                        className={`filter-tag ${active ? "active" : ""}`}
+                                        className={`filter-tag ${isActive ? 'active' : ''}`}
                                         onClick={() => dispatch({ type: "toggleTag", tag })}
                                     >
                                         <span>#{tag}</span>
-                                        {active && <span aria-hidden>✓</span>}
+                                        {isActive && <span>✓</span>}
                                     </button>
                                 );
                             })}
                         </div>
 
-                        <button className="btn primary" type="button" onClick={() => setIsFilterOpen(false)}>
-                            Aplicar filtros
+                        <button
+                            className="btn primary"
+                            type="button"
+                            onClick={() => setIsFilterOpen(false)}
+                        >
+                            Aplicar Filtros
                         </button>
                     </div>
                 </div>

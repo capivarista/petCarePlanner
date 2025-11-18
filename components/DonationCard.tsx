@@ -3,52 +3,102 @@
 import Link from "next/link";
 import { Donation } from "@/types/donation";
 
-export default function DonationCard({ d }: { d: Donation }) {
-  const imageStyle = d.image ? { backgroundImage: `url(${d.image})` } : undefined;
+interface DonationCardProps {
+    donation: Donation;
+}
 
-  return (
-    <div className="card pet-card">
-      <div className="pet-img" style={imageStyle}>
-        {!d.image && <span>{d.name.slice(0, 1)}</span>}
-      </div>
+export default function DonationCard({ donation }: DonationCardProps) {
+    const {
+        id,
+        name,
+        description,
+        image,
+        tags,
+        goal,
+        impact,
+        owner,
+        urgency
+    } = donation;
 
-      <div className="col" style={{ gap: 12 }}>
-        <div className="row" style={{ justifyContent: "space-between", alignItems: "flex-start" }}>
-          <div className="col" style={{ gap: 6 }}>
-            <div style={{ fontWeight: 700, fontSize: "1.05rem" }}>{d.name}</div>
-            <div style={{ color: "var(--muted)", fontSize: 13, lineHeight: 1.4 }}>
-              {d.description}
-            </div>
-            <div className="tags" style={{ marginTop: 2 }}>
-              {d.tags.map((t) => (
-                <span key={t} className="tag">#{t}</span>
-              ))}
-            </div>
-          </div>
-
-          <div className="col" style={{ gap: 8, alignItems: "flex-end" }}>
-            {d.owner && (
-              <Link href={`/ngo/${d.owner.id}`} className="link profile-link">
-                Ver perfil
-              </Link>
-            )}
-            <Link
-              href={`/donate?ngo=${encodeURIComponent(d.name)}`}
-              className="btn cta small"
-              style={{ alignSelf: "flex-end", whiteSpace: "nowrap" }}
+    return (
+        <div className="card pet-card">
+            <div
+                className="pet-img"
+                style={{
+                    backgroundImage: image ? `url(${image})` : undefined,
+                }}
             >
-              Doar agora
-            </Link>
-          </div>
-        </div>
+                {!image && (
+                    <span style={{
+                        fontSize: 48,
+                        opacity: 0.8
+                    }}>
+            🐾
+          </span>
+                )}
 
-        {(d.goal || d.impact) && (
-          <div className="floating-card" style={{ padding: "12px 14px", gap: 6 }}>
-            {d.goal && <div style={{ fontWeight: 600, fontSize: 13 }}>Meta: {d.goal}</div>}
-            {d.impact && <div style={{ fontSize: 12, color: "var(--muted)" }}>{d.impact}</div>}
-          </div>
-        )}
-      </div>
-    </div>
-  );
+                {urgency && (
+                    <div className="urgency-badge">
+                        🔥 {urgency}
+                    </div>
+                )}
+            </div>
+
+            <div className="card-content">
+                <div className="row" style={{
+                    justifyContent: "space-between",
+                    alignItems: "flex-start",
+                    marginBottom: 12
+                }}>
+                    <div style={{ flex: 1 }}>
+                        <h3 className="pet-name">{name}</h3>
+                        <p className="pet-description">
+                            {description}
+                        </p>
+                    </div>
+
+                    {owner && (
+                        <Link
+                            href={`/ngo/${owner.id}`}
+                            className="btn small outline"
+                            style={{ flexShrink: 0 }}
+                        >
+                            Ver ONG
+                        </Link>
+                    )}
+                </div>
+
+                <div className="tags">
+                    {tags.map((tag) => (
+                        <span key={tag} className="tag">
+              #{tag}
+            </span>
+                    ))}
+                </div>
+
+                {(goal || impact) && (
+                    <div className="campaign-info">
+                        {goal && (
+                            <div className="goal">
+                                <strong>Meta:</strong> {goal}
+                            </div>
+                        )}
+                        {impact && (
+                            <div className="impact">
+                                {impact}
+                            </div>
+                        )}
+                    </div>
+                )}
+
+                <Link
+                    href={`/donate?ngo=${encodeURIComponent(name)}`}
+                    className="btn cta block"
+                    style={{ marginTop: 16 }}
+                >
+                    Doar Agora
+                </Link>
+            </div>
+        </div>
+    );
 }
